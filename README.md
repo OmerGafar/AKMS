@@ -12,14 +12,14 @@ manage Activation Key for customers
    
   
 #Configration
-file:com.cust.config.ApplicationConfig.java
-to set email and pass
+	file:com.cust.config.ApplicationConfig.java
+	to set email and pass
 
-file:ApplicationContexr.xml
-lines:<bean id="t" class="com.cust.service.ScheduledTasks">
+	file:ApplicationContexr.xml
+	lines:<bean id="t" class="com.cust.service.ScheduledTasks">
 	</bean>
 	<task:scheduled-tasks>
 		<task:scheduled ref="t" method="sendkeys" fixed-delay="60000" />
-	</task:scheduled-tasks>
-	
-to set thread delay now 60000m = 1min
+	</task:scheduled-tasks>	
+	to set thread delay now 60000m = 1min
+Application uses Spring webmvc,hibernate and mysql database
