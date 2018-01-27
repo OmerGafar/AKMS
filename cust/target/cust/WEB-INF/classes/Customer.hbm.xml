@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD//EN"
+ "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.cust.model.Customer" table="customer">
+		<meta attribute="class-description">
+			This class contains the Customers detail.
+		</meta>
+		<id name="custId" type="int" column="custId">
+			<generator class="increment" />
+		</id>
+		<property name="name" column="name" type="string" />
+		<property name="email" column="email" type="string" />
+		<property name="phone" column="phone" type="string" />
+		<property name="lastKey" column="lastKey" type="string" />
+	</class>
+
+	<class name="com.cust.model.Key" table="activationkey">
+		<meta attribute="class-description">
+			This class contains the Keys records.
+		</meta>
+		<id name="keyId" type="int" column="keyId">
+			<generator class="increment" />
+		</id>
+		<property name="status" column="status" type="string" />
+		<property name="activationKey" column="activationKey" type="string" />
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd 
+    http://www.springframework.org/schema/tx 
+    http://www.springframework.org/schema/tx/spring-tx.xsd
+    http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+	http://www.springframework.org/schema/task
+	http://www.springframework.org/schema/task/spring-task-3.1.xsd">
+
+	<!-- <task:annotation-driven /> -->
+	<bean id="t" class="com.cust.service.ScheduledTasks">
+	</bean>
+	<task:scheduled-tasks>
+		<task:scheduled ref="t" method="sendkeys" fixed-delay="60000" />
+	</task:scheduled-tasks>
+
+
+	<tx:annotation-driven />
+
+	<context:component-scan base-package="com.cust.dao" />
+	<context:component-scan base-package="com.cust.model" />
+	<context:component-scan base-package="com.cust.service" />
+	<context:component-scan base-package="com.cust.controller" />
+
+
+
+
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+		<property name="url" value="jdbc:mysql://localhost:3306/CAKMS"></property>
+		<property name="username" value="root"></property>
+		<property name="password" value="12345678"></property>
+	</bean>
+
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<!-- Database connection settings -->
+		<property name="hibernateProperties">
+			<props>
+				<!-- <prop key="hibernate.transaction.factory_class">org.hibe rnate.transaction.JDBCTransactionFactory</prop> -->
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+				<!-- update,validate,create org.hibernate.MySQLDialect -->
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="current_session_context_class">thread</prop>
+				<!-- <prop key="hibernate.show_sql">true</prop> -->
+			</props>
+		</property>
+		<property name="mappingResources">
+			<list>
+				<value>Customer.hbm.xml</value>
+			</list>
+		</property>
+		<property name="packagesToScan" value="com.cust.model" />
+	</bean>
+
+	<!--====================== com.controller.MainController employeeManage================================================ -->
+
+
+	<bean id="template" class="org.springframework.orm.hibernate5.HibernateTemplate">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+
+	<!-- *************** CUST -->
+	<bean id="customerDao" class="com.cust.dao.CustomerDao">
+		<property name="template" ref="template"></property>
+	</bean>
+	<bean id="customerService" class="com.cust.service.CustomerService">
+		<property name="customerDao" ref="customerDao" />
+	</bean>
+
+	<!-- customerService CustomerDaoInerface -->
+	<!-- *************** Key -->
+	<bean id="keyDao" class="com.cust.dao.KeyDao">
+		<property name="template" ref="template"></property>
+	</bean>
+	<bean id="keyService" class="com.cust.service.KeyService">
+		<property name="keyDao" ref="keyDao" />
+	</bean>
+
+
+
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate5.HibernateTransactionManager"
+		p:sessionFactory-ref="sessionFactory">
+	</bean>
+	<tx:annotation-driven />
+
+	<bean id="jacksonMessageConverter"
+		class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"></bean>
+	<bean
+		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<ref bean="jacksonMessageConverter" />
+			</list>
+		</property>
+	</bean>
+</beans>

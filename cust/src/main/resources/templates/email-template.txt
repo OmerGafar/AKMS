@@ -1,0 +1,12 @@
+    <html>
+     
+    <head></head>
+     
+    <body>
+        <p>Dear ${name} ,</p>
+        <p>Your Activation  Key is :${activationKey} </b></p>
+        <p>Please Don't reply to this email.</p>
+        <p>This email has been sent from Activation  Key Management System (AK-MS). </p>       
+    </body>
+     
+    </html>
